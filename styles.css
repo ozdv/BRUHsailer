@@ -177,8 +177,7 @@ nav .nav-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding: 10px 20px;
 }
 
 nav a,
@@ -756,7 +755,7 @@ body.dark-mode .step.highlight {
 }
 
 .step.highlight {
-  border-left: 4px solid var(--secondary);
+  border-left: 0px solid var(--secondary);
   animation: pulse 2s;
 }
 
