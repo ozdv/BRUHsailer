@@ -25,17 +25,6 @@ document.addEventListener("DOMContentLoaded", async function () {
       UIManager.jumpToLastCompletedStep();
     });
 
-  document
-    .getElementById("minimizeCompletedToggle")
-    .addEventListener("click", function () {
-      this.classList.toggle("active");
-      FilterManager.saveFilterState();
-      const activeFilter = document
-        .querySelector(".filter-btn.active")
-        .getAttribute("data-filter");
-      FilterManager.applyCurrentFilter(activeFilter);
-    });
-
   const removeAllHighlightsBtn = document.getElementById(
     "removeAllHighlightsBtn"
   );

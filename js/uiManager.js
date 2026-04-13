@@ -85,15 +85,9 @@ const UIManager = {
         if (this.checked) {
           stepElement.classList.add("completed");
 
-          const isMinimized = document
-            .getElementById("minimizeCompletedToggle")
-            .classList.contains("active");
-
-          if (isMinimized) {
-            const stepContent = stepElement.querySelector(".step-content");
-            if (stepContent) {
-              stepContent.classList.add("hidden-by-completion");
-            }
+          const stepContent = stepElement.querySelector(".step-content");
+          if (stepContent) {
+            stepContent.classList.add("hidden-by-completion");
           }
         } else {
           stepElement.classList.remove("completed");
@@ -130,20 +124,30 @@ const UIManager = {
     const searchInput = document.getElementById("searchInput");
 
     function setFilter(filterName) {
-      const btn = document.querySelector(`.filter-btn[data-filter="${filterName}"]`);
+      const btn = document.querySelector(
+        `.filter-btn[data-filter="${filterName}"]`
+      );
       if (!btn) return;
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      if (window.FilterManager && typeof window.FilterManager.applyCurrentFilter === 'function') {
+      document
+        .querySelectorAll(".filter-btn")
+        .forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+      if (
+        window.FilterManager &&
+        typeof window.FilterManager.applyCurrentFilter === "function"
+      ) {
         window.FilterManager.applyCurrentFilter(filterName);
-      } else if (typeof FilterManager !== 'undefined' && typeof FilterManager.applyCurrentFilter === 'function') {
+      } else if (
+        typeof FilterManager !== "undefined" &&
+        typeof FilterManager.applyCurrentFilter === "function"
+      ) {
         FilterManager.applyCurrentFilter(filterName);
       }
     }
 
     function debounce(func, wait) {
       let timeout;
-      return function(...args) {
+      return function (...args) {
         clearTimeout(timeout);
         timeout = setTimeout(() => func.apply(this, args), wait);
       };
@@ -152,17 +156,17 @@ const UIManager = {
     const debouncedSearch = debounce(() => {
       const searchTerm = searchInput.value.trim();
       if (searchTerm.length > 0 && previousFilter === null) {
-        const activeBtn = document.querySelector('.filter-btn.active');
-        if (activeBtn) previousFilter = activeBtn.getAttribute('data-filter');
+        const activeBtn = document.querySelector(".filter-btn.active");
+        if (activeBtn) previousFilter = activeBtn.getAttribute("data-filter");
       }
       if (searchTerm.length > 0) {
-        setFilter('all');
+        setFilter("all");
       }
       if (searchTerm.length === 0) {
-        if (previousFilter && previousFilter !== 'all') {
+        if (previousFilter && previousFilter !== "all") {
           setFilter(previousFilter);
         } else {
-          setFilter('all');
+          setFilter("all");
         }
         previousFilter = null;
       }
@@ -172,10 +176,10 @@ const UIManager = {
 
     function handleClearSearch() {
       if (searchInput.value.trim().length === 0) {
-        if (previousFilter && previousFilter !== 'all') {
+        if (previousFilter && previousFilter !== "all") {
           setFilter(previousFilter);
         } else {
-          setFilter('all');
+          setFilter("all");
         }
         previousFilter = null;
         self.performSearch();
@@ -264,51 +268,64 @@ const UIManager = {
 
     const term = searchTerm.toLowerCase();
     let matchCount = 0;
-    const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT, null, false);
+    const walker = document.createTreeWalker(
+      element,
+      NodeFilter.SHOW_TEXT,
+      null,
+      false
+    );
     const nodesToProcess = [];
 
     let currentNode;
-    while (currentNode = walker.nextNode()) {
-        if (currentNode.nodeValue.toLowerCase().includes(term) &&
-            !currentNode.parentElement.classList.contains('search-highlight')) {
-            nodesToProcess.push(currentNode);
-        }
+    while ((currentNode = walker.nextNode())) {
+      if (
+        currentNode.nodeValue.toLowerCase().includes(term) &&
+        !currentNode.parentElement.classList.contains("search-highlight")
+      ) {
+        nodesToProcess.push(currentNode);
+      }
     }
 
-    nodesToProcess.forEach(textNode => {
-        const nodeValue = textNode.nodeValue;
-        const lcNodeValue = nodeValue.toLowerCase();
-        const fragment = document.createDocumentFragment();
-        let lastIndex = 0;
-        let index;
+    nodesToProcess.forEach((textNode) => {
+      const nodeValue = textNode.nodeValue;
+      const lcNodeValue = nodeValue.toLowerCase();
+      const fragment = document.createDocumentFragment();
+      let lastIndex = 0;
+      let index;
 
-        while ((index = lcNodeValue.indexOf(term, lastIndex)) > -1) {
-            matchCount++;
+      while ((index = lcNodeValue.indexOf(term, lastIndex)) > -1) {
+        matchCount++;
 
-            if (index > lastIndex) {
-                fragment.appendChild(document.createTextNode(nodeValue.substring(lastIndex, index)));
-            }
-
-            const highlightSpan = document.createElement("span");
-            highlightSpan.className = "search-highlight";
-            highlightSpan.textContent = nodeValue.substring(index, index + term.length);
-            fragment.appendChild(highlightSpan);
-
-            lastIndex = index + term.length;
+        if (index > lastIndex) {
+          fragment.appendChild(
+            document.createTextNode(nodeValue.substring(lastIndex, index))
+          );
         }
 
-        if (lastIndex < nodeValue.length) {
-            fragment.appendChild(document.createTextNode(nodeValue.substring(lastIndex)));
-        }
+        const highlightSpan = document.createElement("span");
+        highlightSpan.className = "search-highlight";
+        highlightSpan.textContent = nodeValue.substring(
+          index,
+          index + term.length
+        );
+        fragment.appendChild(highlightSpan);
 
-        if (fragment.childNodes.length > 0 && textNode.parentNode) {
-             textNode.parentNode.replaceChild(fragment, textNode);
-        }
+        lastIndex = index + term.length;
+      }
+
+      if (lastIndex < nodeValue.length) {
+        fragment.appendChild(
+          document.createTextNode(nodeValue.substring(lastIndex))
+        );
+      }
+
+      if (fragment.childNodes.length > 0 && textNode.parentNode) {
+        textNode.parentNode.replaceChild(fragment, textNode);
+      }
     });
 
     return matchCount;
   },
-
 
   performSearch: function () {
     this.clearSearchHighlights();
@@ -318,19 +335,28 @@ const UIManager = {
     let overallMatchFound = false;
 
     if (!searchTerm) {
-      steps.forEach(step => step.classList.remove("hidden-by-search"));
-      document.querySelectorAll(".guide-section, .guide-chapter").forEach(el => el.classList.remove("hidden-by-search"));
+      steps.forEach((step) => step.classList.remove("hidden-by-search"));
+      document
+        .querySelectorAll(".guide-section, .guide-chapter")
+        .forEach((el) => el.classList.remove("hidden-by-search"));
 
-      document.querySelectorAll(".section-content.active, .chapter-content.active").forEach(content => {
-        if (!content.closest('.guide-section')?.classList.contains('hidden-by-filter') &&
-            !content.closest('.guide-chapter')?.classList.contains('hidden-by-filter')) {
-
-        } else {
-           content.classList.remove("active");
-           const header = content.previousElementSibling;
-           if (header) header.classList.remove("active");
-        }
-      });
+      document
+        .querySelectorAll(".section-content.active, .chapter-content.active")
+        .forEach((content) => {
+          if (
+            !content
+              .closest(".guide-section")
+              ?.classList.contains("hidden-by-filter") &&
+            !content
+              .closest(".guide-chapter")
+              ?.classList.contains("hidden-by-filter")
+          ) {
+          } else {
+            content.classList.remove("active");
+            const header = content.previousElementSibling;
+            if (header) header.classList.remove("active");
+          }
+        });
       return;
     }
 
@@ -348,7 +374,7 @@ const UIManager = {
       if (meta) {
         stepMatchCount += this.highlightSearchTerm(meta, searchTerm);
       }
-      footnotes.forEach(footnote => {
+      footnotes.forEach((footnote) => {
         stepMatchCount += this.highlightSearchTerm(footnote, searchTerm);
       });
 
@@ -361,34 +387,37 @@ const UIManager = {
     });
 
     document.querySelectorAll(".guide-section").forEach((section) => {
-      const visibleStepsInSection = Array.from(section.querySelectorAll(".step")).some(
-        (step) => step.style.display !== "none"
-      );
+      const visibleStepsInSection = Array.from(
+        section.querySelectorAll(".step")
+      ).some((step) => step.style.display !== "none");
       section.classList.toggle("hidden-by-search", !visibleStepsInSection);
       if (visibleStepsInSection) {
         overallMatchFound = true;
         const content = section.querySelector(".section-content");
         const header = section.querySelector(".section-header");
-        if (content && !content.classList.contains('active')) content.classList.add("active");
-        if (header && !header.classList.contains('active')) header.classList.add("active");
+        if (content && !content.classList.contains("active"))
+          content.classList.add("active");
+        if (header && !header.classList.contains("active"))
+          header.classList.add("active");
       }
     });
 
     document.querySelectorAll(".guide-chapter").forEach((chapter) => {
-       const visibleSectionsInChapter = Array.from(chapter.querySelectorAll(".guide-section")).some(
-         (section) => !section.classList.contains("hidden-by-search")
-       );
-       chapter.classList.toggle("hidden-by-search", !visibleSectionsInChapter);
+      const visibleSectionsInChapter = Array.from(
+        chapter.querySelectorAll(".guide-section")
+      ).some((section) => !section.classList.contains("hidden-by-search"));
+      chapter.classList.toggle("hidden-by-search", !visibleSectionsInChapter);
 
-        if (visibleSectionsInChapter) {
-            overallMatchFound = true;
-            const content = chapter.querySelector(".chapter-content");
-            const title = chapter.querySelector(".chapter-title");
-            if (content && !content.classList.contains('active')) content.classList.add("active");
-            if (title && !title.classList.contains('active')) title.classList.add("active");
-        }
+      if (visibleSectionsInChapter) {
+        overallMatchFound = true;
+        const content = chapter.querySelector(".chapter-content");
+        const title = chapter.querySelector(".chapter-title");
+        if (content && !content.classList.contains("active"))
+          content.classList.add("active");
+        if (title && !title.classList.contains("active"))
+          title.classList.add("active");
+      }
     });
-
   },
 
   getHighlightStorageKey: function () {
@@ -562,21 +591,30 @@ const UIManager = {
       !guideContent ||
       !guideContent.contains(range.commonAncestorContainer)
     ) {
-      console.log("Selection not inside guideContent or guideContent missing", guideContent, range.commonAncestorContainer);
+      console.log(
+        "Selection not inside guideContent or guideContent missing",
+        guideContent,
+        range.commonAncestorContainer
+      );
       return;
     }
 
     let stepContent = null;
     let node = range.startContainer;
     while (node && node !== guideContent) {
-      if (node.nodeType === Node.ELEMENT_NODE && node.classList.contains("step-content")) {
+      if (
+        node.nodeType === Node.ELEMENT_NODE &&
+        node.classList.contains("step-content")
+      ) {
         stepContent = node;
         break;
       }
       node = node.parentNode;
     }
     if (!stepContent) {
-      console.warn("Highlight selection is not inside a .step-content element. Aborting highlight.");
+      console.warn(
+        "Highlight selection is not inside a .step-content element. Aborting highlight."
+      );
       return;
     }
 
@@ -593,7 +631,7 @@ const UIManager = {
       let currentNode;
       while ((currentNode = walker.nextNode())) {
         let intersects = false;
-        if (typeof range.intersectsNode === 'function') {
+        if (typeof range.intersectsNode === "function") {
           intersects = range.intersectsNode(currentNode);
         } else {
           const nodeRange = document.createRange();
@@ -642,7 +680,7 @@ const UIManager = {
       selection.removeAllRanges();
     }
   },
-  mergeAdjacentHighlights: function(root) {
+  mergeAdjacentHighlights: function (root) {
     const walker = document.createTreeWalker(
       root,
       NodeFilter.ELEMENT_NODE,

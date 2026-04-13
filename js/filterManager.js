@@ -2,7 +2,7 @@ const FilterManager = {
   loadFilterState: function () {
     const savedFilter = Utils.getStorageItem("guideFilter", "guideFilter");
     if (savedFilter) {
-      const { filter, minimized } = JSON.parse(savedFilter);
+      const { filter } = JSON.parse(savedFilter);
 
       document.querySelectorAll(".filter-btn").forEach((btn) => {
         if (btn.getAttribute("data-filter") === filter) {
@@ -12,16 +12,6 @@ const FilterManager = {
         }
       });
 
-      if (minimized) {
-        document
-          .getElementById("minimizeCompletedToggle")
-          .classList.add("active");
-      } else {
-        document
-          .getElementById("minimizeCompletedToggle")
-          .classList.remove("active");
-      }
-
       this.applyCurrentFilter(filter);
     }
   },
@@ -30,13 +20,7 @@ const FilterManager = {
     const filter = document
       .querySelector(".filter-btn.active")
       .getAttribute("data-filter");
-    const isMinimized = document
-      .getElementById("minimizeCompletedToggle")
-      .classList.contains("active");
-    Utils.setStorageItem(
-      "guideFilter",
-      JSON.stringify({ filter: filter, minimized: isMinimized })
-    );
+    Utils.setStorageItem("guideFilter", JSON.stringify({ filter: filter }));
   },
 
   applyCurrentFilter: function (filter) {
@@ -48,9 +32,6 @@ const FilterManager = {
 
     const steps = document.querySelectorAll(".step");
     const lastCompletedStep = document.querySelector(".step.highlight");
-    const isMinimized = document
-      .getElementById("minimizeCompletedToggle")
-      .classList.contains("active");
     const sections = document.querySelectorAll(".guide-section");
     const chapters = document.querySelectorAll(".guide-chapter");
 
@@ -88,7 +69,7 @@ const FilterManager = {
       const isCompleted = step.classList.contains("completed");
 
       if (stepContent) {
-        if (isMinimized && isCompleted) {
+        if (isCompleted) {
           stepContent.style.display = "none";
         } else {
           stepContent.style.display = "block";
