@@ -57,16 +57,16 @@ ol,
 div,
 span {
   line-height: 1.2;
-  margin-top: 0.5em;
-  margin-bottom: 0.5em;
 }
 
 div .step-header {
-  margin-top: 0em;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 div .step-content {
-  margin-bottom: 0em;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 a {
@@ -92,12 +92,11 @@ u {
 ul,
 ol {
   padding-left: 1.5em;
-  margin-top: 0.5em;
-  margin-bottom: 0.5em;
+  margin-top: 0;
 }
 
 li {
-  margin-bottom: 0.5em;
+  margin-bottom: 0;
 }
 
 li:last-child {
@@ -236,7 +235,6 @@ nav div {
 }
 
 .progress-text {
-  
   display: none;
 }
 
@@ -296,6 +294,7 @@ nav div {
 
 .chapter-content .guide-section:last-child {
   margin-bottom: 0;
+  margin-top: 0;
 }
 
 .section-header {
@@ -335,7 +334,7 @@ nav div {
   border: 1px solid var(--section-border);
   border-radius: 6px;
   padding: 0;
-  margin-bottom: 25px;
+  margin-bottom: 4px;
   overflow: hidden;
   transition: background-color 0.3s ease, border-color 0.3s ease;
 }
@@ -345,7 +344,7 @@ nav div {
 }
 
 .step.completed {
-  border-color: var(--completed-text);
+  /* border-color: var(--completed-text); */
   background-color: transparent;
   opacity: 0.75;
 }
@@ -360,6 +359,7 @@ nav div {
 .step.completed .step-time,
 .step.completed .checkbox-container {
   color: var(--completed-text);
+  margin-top: 0em;
 }
 
 .step.completed .step-meta {
@@ -370,10 +370,10 @@ nav div {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 12px;
+  padding: 0px 12px;
   cursor: pointer;
   border-bottom: 1px solid var(--section-border);
-  min-height: 30px;
+  min-height: 12px;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
   background-color: var(--step-header-bg);
@@ -809,11 +809,15 @@ body.dark-mode .error-message {
 }
 
 body.dark-mode .search-highlight {
-  background-color: rgba(255, 230, 80, 0.5); /* Slightly adjusted yellow for dark mode */
+  background-color: rgba(
+    255,
+    230,
+    80,
+    0.5
+  ); /* Slightly adjusted yellow for dark mode */
   color: #eee; /* Lighter text for dark mode */
   box-shadow: 0 0 0 1px rgba(255, 230, 80, 0.7);
 }
-
 
 @media (max-width: 600px) {
   .filter-container {
