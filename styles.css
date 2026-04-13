@@ -343,8 +343,6 @@ nav div {
 }
 
 .step.completed {
-  /* border-color: var(--completed-text); */
-  background-color: transparent;
   opacity: 0.75;
 }
 
@@ -399,6 +397,19 @@ nav div {
 }
 
 .step-time {
+  font-size: 0.85rem;
+  color: var(--text-color);
+  padding-right: 3px;
+  font-weight: bold;
+}
+
+.step-metadata-container {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.step-gp {
   font-size: 0.85rem;
   color: var(--text-color);
   padding-right: 3px;
@@ -747,7 +758,7 @@ body.highlight-cursor-active {
 }
 
 .guide-chapter {
-  margin-bottom: 30px;
+  margin-bottom: 16px;
   border: 1px solid var(--section-border);
   border-radius: 5px;
   overflow: hidden;

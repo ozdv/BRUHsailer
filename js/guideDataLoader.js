@@ -85,6 +85,11 @@ const GuideDataLoader = {
                 ? step.metadata.total_time
                 : "";
 
+            const gpDisplay =
+              step.metadata && step.metadata.gp_stack
+                ? step.metadata.gp_stack
+                : "";
+
             stepHeader.innerHTML = `
               <div class="checkbox-container">
                 <input type="checkbox" class="checkbox" id="check-${
@@ -92,7 +97,10 @@ const GuideDataLoader = {
                 }-${chapterStepCount}">
                 <span class="step-number">Step ${chapterStepCount}</span>
               </div>
-              <span class="step-time">Time: ${timeDisplay}</span>
+              <div class="step-metadata-container">
+                <span class="step-time">Time: ${timeDisplay}</span>
+                <span class="step-gp">GP: ${gpDisplay}</span>
+              </div>
             `;
 
             const stepContent = document.createElement("div");
