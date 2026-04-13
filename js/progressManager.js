@@ -9,7 +9,10 @@ const ProgressManager = {
   },
 
   loadProgress: function () {
-    const savedProgress = Utils.getStorageItem("guideProgress", "guideProgress");
+    const savedProgress = Utils.getStorageItem(
+      "guideProgress",
+      "guideProgress"
+    );
     if (savedProgress) {
       const progress = JSON.parse(savedProgress);
       for (const id in progress) {
@@ -53,6 +56,13 @@ const ProgressManager = {
     ).textContent = `${progressPercent}% Complete`;
 
     this.highlightLastCompletedStep();
+
+    if (
+      typeof UIManager !== "undefined" &&
+      typeof UIManager.updateCompletionIndicators === "function"
+    ) {
+      UIManager.updateCompletionIndicators();
+    }
   },
 
   highlightLastCompletedStep: function () {

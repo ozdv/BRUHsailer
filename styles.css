@@ -706,6 +706,34 @@ body.highlight-cursor-active {
   font-size: 1.4rem;
   cursor: pointer;
   border-radius: 4px 4px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+/* When a chapter is collapsed and every step in it is done, show a check on the header */
+.guide-chapter.all-steps-complete:not(:has(.chapter-content.active))
+  .chapter-title::after {
+  content: "✓";
+  flex-shrink: 0;
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #9fe8b0;
+  line-height: 1;
+}
+
+/* Sub-chapters (sections 1.1, 1.2, …): check on the section header when collapsed and all steps done */
+.guide-section.all-steps-complete:not(.footnotes-section):not(
+    :has(.section-content.active)
+  )
+  .section-time::after {
+  content: "✓";
+  font-weight: bold;
+  color: #9fe8b0;
+  margin-left: 0.5rem;
+  font-size: 1.1rem;
+  line-height: 1;
 }
 
 .chapter-content {

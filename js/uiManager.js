@@ -532,6 +532,34 @@ const UIManager = {
   showSaveToast: function (message = "Progress saved") {
     Utils.showToast(message);
   },
+
+  /**
+   * Marks chapters and sections (1.1, 1.2, …) whose steps are all completed,
+   * for UI (e.g. checkmark when collapsed).
+   */
+  updateCompletionIndicators: function () {
+    document.querySelectorAll(".guide-chapter").forEach((chapter) => {
+      const steps = chapter.querySelectorAll(".step");
+      const allComplete =
+        steps.length > 0 &&
+        Array.from(steps).every((step) =>
+          step.classList.contains("completed")
+        );
+      chapter.classList.toggle("all-steps-complete", allComplete);
+    });
+
+    document
+      .querySelectorAll(".guide-section:not(.footnotes-section)")
+      .forEach((section) => {
+        const steps = section.querySelectorAll(".step");
+        const allComplete =
+          steps.length > 0 &&
+          Array.from(steps).every((step) =>
+            step.classList.contains("completed")
+          );
+        section.classList.toggle("all-steps-complete", allComplete);
+      });
+  },
   jumpToLastCompletedStep: function () {
     const completedSteps = document.querySelectorAll(".step.completed");
     if (completedSteps.length > 0) {
